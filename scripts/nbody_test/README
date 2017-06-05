@@ -1,0 +1,11 @@
+This script is used to compare the results for n-body simulation runs.
+
+To use it, outputs from all of the implementations have to be dumped as
+text files and passed as arguments to this script.
+
+Example (the path might be anything, as
+long as it points to valid nbody executable):
+work/pony/nbody/nbody 1 20 10000 > pony_nbody.txt
+work/go/nbody/nbody 1 20 10000 > go_nbody.txt
+
+./nbody_test.py pony_nbody.txt go_nbody.txt

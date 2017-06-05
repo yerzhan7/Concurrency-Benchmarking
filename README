@@ -1,0 +1,12 @@
+To compile and run benchmarks using configurations that result in short runs:
+cd scripts/run_tool
+./main.py ../../
+
+Please note that compilers for pony and go as well as SBT for scala must be
+installed and available in path.
+
+On top of that, Python version must be >= 3.5 and python3-tk as well as
+matplotlib must be installed.
+
+For further details, please see the manual at scripts/run_tool/readme_manual.txt
+as well as the full report.

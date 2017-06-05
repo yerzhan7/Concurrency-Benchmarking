@@ -1,0 +1,11 @@
+go/*/src/src
+pony/*/src/src
+pony/*/test/test
+ScalaAkka/*/project/project/
+ScalaAkka/*/project/target/
+ScalaAkka/*/target/
+
+scripts/run_tool/work*/
+scripts/run_tool/__pycache__/
+scripts/run_tool/lang_cfg/__pycache__/
+scripts/run_tool/tests/__pycache__/

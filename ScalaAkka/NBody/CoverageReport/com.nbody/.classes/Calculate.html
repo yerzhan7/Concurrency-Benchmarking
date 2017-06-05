@@ -1,0 +1,200 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Calculate</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.nbody</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Calculate (com.nbody)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+  <tr>
+    <td class="name">Calculate$</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (19/ 19)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (40/ 40)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">Calculate$Test</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (16/ 16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (112/ 112)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (35/ 35)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (152/ 152)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.nbody
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import VectorMethods._
+<i>4</i>&nbsp;import scala.collection.mutable.Queue
+<i>5</i>&nbsp;
+<b class="fc"><i>6</i>&nbsp;object Calculate {</b>
+<b class="fc"><i>7</i>&nbsp;    def DT:Double = 0.01 //steps for AB method</b>
+<b class="fc"><i>8</i>&nbsp;    def eulerSteps:Double = 1000.0 //micro-steps for Euler method</b>
+<b class="fc"><i>9</i>&nbsp;    def eulerDT: Double = DT/eulerSteps</b>
+<b class="fc"><i>10</i>&nbsp;    def GR:Double = 1.0 //gravity constant</b>
+<b class="fc"><i>11</i>&nbsp;    def AB1: Double = -3.0 / 8</b>
+<b class="fc"><i>12</i>&nbsp;    def AB2: Double = 37.0 / 24</b>
+<b class="fc"><i>13</i>&nbsp;    def AB3: Double = -59.0 / 24</b>
+<b class="fc"><i>14</i>&nbsp;    def AB4: Double = 55.0 / 24</b>
+<i>15</i>&nbsp;
+<b class="fc"><i>16</i>&nbsp;</b>
+<b class="fc"><i>17</i>&nbsp;</b>
+<i>18</i>&nbsp;    def AB4_PosAndVec(id: Int, positions: Queue[Array[Vector[Double]]], velocities: Queue[Array[Vector[Double]]],
+<b class="fc"><i>19</i>&nbsp;                      masses: Array[Double]): Array[Vector[Double]] = {</b>
+<b class="fc"><i>20</i>&nbsp;</b>
+<b class="fc"><i>21</i>&nbsp;        val u1: Vector[Double] = velocities(0)(id)</b>
+<b class="fc"><i>22</i>&nbsp;        val u2: Vector[Double] = velocities(1)(id)</b>
+<b class="fc"><i>23</i>&nbsp;        val u3: Vector[Double] = velocities(2)(id)</b>
+<b class="fc"><i>24</i>&nbsp;        val u4: Vector[Double] = velocities(3)(id)</b>
+<b class="fc"><i>25</i>&nbsp;</b>
+<b class="fc"><i>26</i>&nbsp;        val u1234: Vector[Double] = u1.VecMltpC(AB1) + u2.VecMltpC(AB2) + u3.VecMltpC(AB3) + u4.VecMltpC(AB4)</b>
+<i>27</i>&nbsp;
+<b class="fc"><i>28</i>&nbsp;</b>
+<b class="fc"><i>29</i>&nbsp;        val pos1: Array[Vector[Double]] = positions(0)</b>
+<b class="fc"><i>30</i>&nbsp;        val pos2: Array[Vector[Double]] = positions(1)</b>
+<b class="fc"><i>31</i>&nbsp;        val pos3: Array[Vector[Double]] = positions(2)</b>
+<b class="fc"><i>32</i>&nbsp;        val pos4: Array[Vector[Double]] = positions(3)</b>
+<b class="fc"><i>33</i>&nbsp;</b>
+<b class="fc"><i>34</i>&nbsp;        val f1234: Vector[Double] =</b>
+<b class="fc"><i>35</i>&nbsp;            totalForce(id, pos1, masses).VecMltpC(AB1) +</b>
+<b class="fc"><i>36</i>&nbsp;              totalForce(id, pos2, masses).VecMltpC(AB2) +</b>
+<b class="fc"><i>37</i>&nbsp;              totalForce(id, pos3, masses).VecMltpC(AB3) +</b>
+<b class="fc"><i>38</i>&nbsp;              totalForce(id, pos4, masses).VecMltpC(AB4)</b>
+<b class="fc"><i>39</i>&nbsp;</b>
+<b class="fc"><i>40</i>&nbsp;</b>
+<b class="fc"><i>41</i>&nbsp;        val ans = new Array[Vector[Double]](2)</b>
+<i>42</i>&nbsp;        //position saved in ans(0)
+<b class="fc"><i>43</i>&nbsp;        ans(0) = pos4(id) + u1234.VecMltpC(DT)</b>
+<b class="fc"><i>44</i>&nbsp;        //velocity saved in ans (1)</b>
+<b class="fc"><i>45</i>&nbsp;        ans(1) = u4 + f1234.VecMltpC(DT/masses(id))</b>
+<b class="fc"><i>46</i>&nbsp;</b>
+<b class="fc"><i>47</i>&nbsp;        ans</b>
+<i>48</i>&nbsp;    }
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;    def euler_stepPos(id: Int, positions: Array[Vector[Double]], velocity: Vector[Double],
+<b class="fc"><i>52</i>&nbsp;                      masses: Array[Double], step:Double = eulerDT): Vector[Double] = {</b>
+<b class="fc"><i>53</i>&nbsp;        positions(id) + velocity.VecMltpC(step)</b>
+<b class="fc"><i>54</i>&nbsp;    }</b>
+<b class="fc"><i>55</i>&nbsp;</b>
+<b class="fc"><i>56</i>&nbsp;</b>
+<b class="fc"><i>57</i>&nbsp;    def euler_stepVel(id: Int, positions: Array[Vector[Double]], velocity: Vector[Double],</b>
+<b class="fc"><i>58</i>&nbsp;                      masses: Array[Double],step:Double = eulerDT): Vector[Double] = {</b>
+<b class="fc"><i>59</i>&nbsp;        velocity + totalForce(id, positions, masses).VecMltpC(step/masses(id))</b>
+<b class="fc"><i>60</i>&nbsp;    }</b>
+<b class="fc"><i>61</i>&nbsp;</b>
+<b class="fc"><i>62</i>&nbsp;</b>
+<i>63</i>&nbsp;    def dist(pos1:Vector[Double], //Euclidean Distance Function
+<b class="fc"><i>64</i>&nbsp;             pos2: Vector[Double]):Double = {</b>
+<b class="fc"><i>65</i>&nbsp;        (pos1-pos2).Magnitude</b>
+<b class="fc"><i>66</i>&nbsp;    }</b>
+<i>67</i>&nbsp;
+<b class="fc"><i>68</i>&nbsp;</b>
+<b class="fc"><i>69</i>&nbsp;    def newtonGF(x: Double):Double = { //Newton Gravity Force</b>
+<b class="fc"><i>70</i>&nbsp;        -1/(x*x)</b>
+<b class="fc"><i>71</i>&nbsp;    }</b>
+<b class="fc"><i>72</i>&nbsp;</b>
+<b class="fc"><i>73</i>&nbsp;</b>
+<b class="fc"><i>74</i>&nbsp;    def force2B(pos1:Vector[Double], pos2: Vector[Double], //Force bet 2 bodies</b>
+<b class="fc"><i>75</i>&nbsp;                mass1: Double, mass2: Double):Vector[Double] = {</b>
+<b class="fc"><i>76</i>&nbsp;        (pos1-pos2).VecMltpC(</b>
+<b class="fc"><i>77</i>&nbsp;            (mass1*mass2*newtonGF(dist(pos1,pos2))*GR)/dist(pos1,pos2))</b>
+<b class="fc"><i>78</i>&nbsp;    }</b>
+<b class="fc"><i>79</i>&nbsp;</b>
+<b class="fc"><i>80</i>&nbsp;</b>
+<b class="fc"><i>81</i>&nbsp;    def totalForce(id: Int, positions: Array[Vector[Double]], //Total Force from all bodies</b>
+<b class="fc"><i>82</i>&nbsp;                   masses: Array[Double]): Vector[Double] = {</b>
+<b class="fc"><i>83</i>&nbsp;        var sum = Vector[Double](0,0,0)</b>
+<b class="fc"><i>84</i>&nbsp;        for(i&lt;-0 until positions.size){</b>
+<b class="fc"><i>85</i>&nbsp;            if(i != id){</b>
+<b class="fc"><i>86</i>&nbsp;                sum = sum + force2B(positions(id), positions(i), masses(id), masses(i))</b>
+<b class="fc"><i>87</i>&nbsp;            }</b>
+<b class="fc"><i>88</i>&nbsp;        }</b>
+<b class="fc"><i>89</i>&nbsp;        sum</b>
+<b class="fc"><i>90</i>&nbsp;    }</b>
+<b class="fc"><i>91</i>&nbsp;}</b>
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2017-03-08 20:55</div>
+</div>
+</body>
+</html>
